@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loading - Puasaku</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Puasaku by Nursyam</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2E7D32">
+    <meta name="theme-color" content="#0B4F3C">
 </head>
-<body>
-    <div class="loader-container">
-        <div class="loader-animation">
-            <div class="bedug-icon">
-                <i class="fas fa-drum"></i>
+<body class="transition-page">
+    <div class="container">
+        <div class="loading-content">
+            <div class="crescent-moon"></div>
+            <h2 class="loading-text">Menyiapkan Berkah Ramadan...</h2>
+            <div class="loading-progress">
+                <div class="progress-bar"></div>
             </div>
-            <div class="kurma-icon">
-                <i class="fas fa-apple-alt"></i>
-            </div>
         </div>
-        <div class="loader-text">
-            <i class="fas fa-spinner fa-spin"></i> Memuat...
-        </div>
-        <div class="loader-progress">
-            <div class="loader-progress-bar"></div>
-        </div>
-        <p style="margin-top: 2rem;">Puasaku by Nursyam</p>
     </div>
-    
-    <script src="js/app.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script>
+        // Gatekeeper logic
+        setTimeout(() => {
+            const userProfile = JSON.parse(localStorage.getItem('puasaku_user'));
+            if (userProfile && userProfile.name) {
+                window.location.href = 'dashboard.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        }, 1500);
+    </script>
 </body>
 </html>
