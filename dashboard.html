@@ -1,169 +1,795 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Dashboard - Puasaku by Nursyam</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.json">
+    <title>Dashboard - Puasaku</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Dashboard Layout */
+        .app-container {
+            min-height: 100vh;
+            background: var(--bg-primary);
+            padding: 1rem 1rem 80px 1rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .greeting h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .greeting p {
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50px;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+        }
+
+        .logout-btn:active {
+            transform: scale(0.9);
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            border-radius: 28px;
+            padding: 1.4rem 1.2rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:active {
+            transform: scale(0.99);
+        }
+
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            color: var(--accent-emerald);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .card-title span {
+            font-size: 1.6rem;
+        }
+
+        /* Finance Section */
+        .budget-display {
+            background: linear-gradient(135deg, rgba(42, 92, 78, 0.2) 0%, rgba(212, 175, 55, 0.2) 100%);
+            padding: 1rem;
+            border-radius: 18px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .budget-display h3 {
+            font-size: 2rem;
+            color: var(--accent-gold);
+            margin-top: 0.3rem;
+        }
+
+        .finance-form {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .finance-form input {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.9rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .finance-form input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        .finance-form button {
+            padding: 0.9rem 1.5rem;
+            background: var(--accent-emerald);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .finance-form button:active {
+            transform: scale(0.95);
+        }
+
+        .expense-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border-radius: 16px;
+            background: var(--input-bg);
+            padding: 0.5rem;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .expense-item:last-child {
+            border-bottom: none;
+        }
+
+        .expense-item button {
+            background: none;
+            border: none;
+            color: #ff6b6b;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+        }
+
+        /* Checklist Section */
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem;
+            background: var(--input-bg);
+            border-radius: 14px;
+            cursor: pointer;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--accent-gold);
+            cursor: pointer;
+        }
+
+        .checklist-item label {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        /* Tadarus Tracker */
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 16px;
+            background: var(--input-bg);
+            border-radius: 50px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-emerald), var(--accent-gold));
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 50px;
+        }
+
+        .tadarus-input {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .tadarus-input input {
+            flex: 1;
+            padding: 0.9rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            color: var(--text-primary);
+        }
+
+        .tadarus-input button {
+            padding: 0.9rem 1.8rem;
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Hutang Puasa Counter */
+        .counter-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1rem;
+        }
+
+        .counter-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background: var(--accent-emerald);
+            color: white;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .counter-btn:active {
+            transform: scale(0.9);
+        }
+
+        .counter-btn.minus {
+            background: #b04141;
+        }
+
+        .counter-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* Randomizer Trigger */
+        .randomizer-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--accent-emerald), var(--accent-gold));
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .randomizer-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: flex-end;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            width: 100%;
+            border-radius: 30px 30px 0 0;
+            padding: 2rem 1.5rem;
+            animation: slideUp 0.4s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal h3 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+        }
+
+        .food-idea {
+            font-size: 1.8rem;
+            margin: 1.5rem 0;
+            text-align: center;
+            padding: 1rem;
+            background: var(--input-bg);
+            border-radius: 20px;
+        }
+
+        .close-modal {
+            width: 100%;
+            padding: 1rem;
+            background: var(--accent-emerald);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 0.8rem 1rem 1.2rem;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            gap: 0.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--accent-gold);
+        }
+
+        .nav-item span {
+            font-size: 1.5rem;
+        }
+
+        .nav-item:active {
+            transform: scale(0.9);
+        }
+
+        /* Sections */
+        .dashboard-section {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .dashboard-section.hidden {
+            display: none;
+        }
+    </style>
 </head>
-<body class="dashboard-page">
-    <!-- Bottom Navigation for Mobile -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" data-section="finance">
-            <span class="nav-icon">💰</span>
-            <span class="nav-label">Finance</span>
-        </button>
-        <button class="nav-item" data-section="ibadah">
-            <span class="nav-icon">🕌</span>
-            <span class="nav-label">Ibadah</span>
-        </button>
-        <button class="nav-item" data-section="tadarus">
-            <span class="nav-icon">📖</span>
-            <span class="nav-label">Tadarus</span>
-        </button>
-        <button class="nav-item" data-section="hutang">
-            <span class="nav-icon">⏳</span>
-            <span class="nav-label">Hutang</span>
-        </button>
-        <button class="nav-item" data-section="randomizer">
-            <span class="nav-icon">🎲</span>
-            <span class="nav-label">Random</span>
-        </button>
-    </nav>
-
-    <!-- Main Content Area -->
-    <main class="dashboard-content">
-        <!-- Header with User Info -->
-        <header class="dashboard-header glass-effect">
-            <div class="user-greeting">
-                <h2>Selamat Berpuasa, <span id="userName">...</span>!</h2>
-                <p id="userTarget">Target: ...</p>
+<body>
+    <div class="app-container" id="appContainer">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="greeting">
+                <h2 id="greetingName">Loading...</h2>
+                <p id="userTarget">Target: -</p>
             </div>
-            <button class="logout-btn" id="logoutBtn" title="Logout">🚪</button>
-        </header>
+            <div class="logout-btn" id="logoutBtn" title="Keluar">↪️</div>
+        </div>
 
-        <!-- Finance Section -->
-        <section id="finance" class="content-section active">
-            <div class="card glass-effect">
-                <h3>Smart Finance</h3>
-                <div class="budget-info">
-                    <p>Sisa Saldo Hari Ini: <span id="remainingBudget">Rp 0</span></p>
+        <!-- Main Content (Dynamic Sections) -->
+        <div id="dashboardSection" class="dashboard-section">
+            <!-- Smart Finance Card -->
+            <div class="feature-card">
+                <div class="card-title">
+                    <span>💰</span> Smart Finance
                 </div>
-                
-                <form id="expenseForm" class="expense-form">
-                    <input type="text" id="expenseName" placeholder="Nama Pengeluaran" required>
-                    <input type="number" id="expenseAmount" placeholder="Harga (Rp)" required min="0">
-                    <button type="submit" class="btn-small">Tambah</button>
-                </form>
+                <div class="budget-display">
+                    <small>Sisa Saldo Hari Ini</small>
+                    <h3 id="remainingBudget">Rp 0</h3>
+                </div>
+                <div class="finance-form">
+                    <input type="text" id="expenseName" placeholder="Nama (e.g., Takjil)">
+                    <input type="number" id="expenseAmount" placeholder="Harga" min="0">
+                    <button onclick="addExpense()">Tambah</button>
+                </div>
+                <div class="expense-list" id="expenseList"></div>
+            </div>
 
-                <div class="expense-list-container">
-                    <h4>Daftar Pengeluaran</h4>
-                    <ul id="expenseList" class="expense-list"></ul>
+            <!-- Ibadah Checklist Card -->
+            <div class="feature-card">
+                <div class="card-title">
+                    <span>🕌</span> Ibadah Checklist
+                </div>
+                <div class="checklist-grid" id="checklistContainer">
+                    <!-- Akan diisi JavaScript -->
                 </div>
             </div>
-        </section>
 
-        <!-- Ibadah Section -->
-        <section id="ibadah" class="content-section">
-            <div class="card glass-effect">
-                <h3>Checklist Ibadah Harian</h3>
-                <p class="date-display" id="currentDate"></p>
-                
-                <div class="prayer-checklist">
-                    <label class="checkbox-item">
-                        <input type="checkbox" id="subuh"> Shubuh
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" id="dzuhur"> Dzuhur
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" id="ashar"> Ashar
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" id="maghrib"> Maghrib
-                    </label>
-                    <label class="checkbox-item">
-                        <input type="checkbox" id="isya"> Isya
-                    </label>
-                    <label class="checkbox-item tarawih">
-                        <input type="checkbox" id="tarawih"> Tarawih
-                    </label>
+            <!-- Tadarus Tracker Card -->
+            <div class="feature-card">
+                <div class="card-title">
+                    <span>📖</span> Tadarus Tracker
                 </div>
-
-                <div class="prayer-stats">
-                    <p>Progress Ibadah: <span id="prayerProgress">0/6</span></p>
-                    <div class="progress-bar-container">
-                        <div id="prayerProgressBar" class="progress-fill" style="width: 0%"></div>
+                <div class="progress-container">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Halaman <span id="currentPage">0</span>/604</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Tadarus Section -->
-        <section id="tadarus" class="content-section">
-            <div class="card glass-effect">
-                <h3>Tadarus Tracker</h3>
-                
                 <div class="tadarus-input">
-                    <label for="lastPage">Halaman Terakhir:</label>
-                    <input type="number" id="lastPage" min="1" max="604" placeholder="1-604">
-                    <button id="updatePageBtn" class="btn-small">Update</button>
+                    <input type="number" id="pageInput" placeholder="Halaman terakhir" min="0" max="604">
+                    <button onclick="updateTadarus()">Update</button>
                 </div>
-
-                <div class="quran-progress">
-                    <p>Progress: <span id="pageProgress">0/604</span> halaman</p>
-                    <div class="progress-bar-container">
-                        <div id="quranProgressBar" class="progress-fill" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <div class="motivation-message" id="motivationMessage"></div>
             </div>
-        </section>
 
-        <!-- Hutang Puasa Section -->
-        <section id="hutang" class="content-section">
-            <div class="card glass-effect">
-                <h3>Hutang Puasa</h3>
-                
+            <!-- Hutang Puasa Card -->
+            <div class="feature-card">
+                <div class="card-title">
+                    <span>📅</span> Hutang Puasa
+                </div>
                 <div class="counter-container">
-                    <button id="decrementHutang" class="counter-btn">-</button>
-                    <span id="hutangCount" class="counter-value">0</span>
-                    <button id="incrementHutang" class="counter-btn">+</button>
-                </div>
-                
-                <p class="hutang-note">Hari bolong yang perlu diganti</p>
-                
-                <button id="resetHutang" class="btn-small secondary">Reset</button>
-            </div>
-        </section>
-
-        <!-- Randomizer Section -->
-        <section id="randomizer" class="content-section">
-            <div class="card glass-effect">
-                <h3>Menu Randomizer</h3>
-                <p class="randomizer-sub">Ide Takjil & Sahur</p>
-                
-                <button id="randomizeBtn" class="btn-primary">Dapatkan Ide!</button>
-                
-                <div id="randomResult" class="random-result hidden">
-                    <p class="random-emoji">🍽️</p>
-                    <p id="randomIdea" class="random-idea"></p>
+                    <button class="counter-btn minus" onclick="updateHutang(-1)">-</button>
+                    <span class="counter-value" id="hutangValue">0</span>
+                    <button class="counter-btn" onclick="updateHutang(1)">+</button>
                 </div>
             </div>
-        </section>
-    </main>
 
-    <!-- Modal for Randomizer -->
-    <div id="randomModal" class="modal glass-effect">
-        <div class="modal-content slide-up">
-            <span class="close-modal">&times;</span>
-            <p id="modalIdea" class="modal-idea"></p>
+            <!-- Menu Randomizer -->
+            <button class="randomizer-btn" onclick="showRandomFood()">
+                🍽️ Ide Menu Sahur/Takjil
+            </button>
         </div>
     </div>
 
-    <script src="js/utils.js"></script>
-    <script src="js/dashboard.js"></script>
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" data-section="dashboard">
+            <span>🏠</span>
+            <span>Beranda</span>
+        </div>
+        <div class="nav-item" data-section="ibadah">
+            <span>🕌</span>
+            <span>Ibadah</span>
+        </div>
+        <div class="nav-item" data-section="keuangan">
+            <span>💰</span>
+            <span>Keuangan</span>
+        </div>
+    </div>
+
+    <!-- Modal Randomizer -->
+    <div class="modal" id="foodModal">
+        <div class="modal-content">
+            <h3>🍽️ Ide Menu</h3>
+            <div class="food-idea" id="foodIdea">Loading...</div>
+            <button class="close-modal" onclick="closeModal()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== INITIALIZATION & SECURITY ====================
+        (function() {
+            // Redirect jika tidak login
+            const userData = localStorage.getItem('puasaku_user');
+            if (!userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load user data
+            try {
+                const user = JSON.parse(userData);
+                document.getElementById('greetingName').textContent = `Halo, ${user.nickname}`;
+                document.getElementById('userTarget').textContent = `Target: ${user.target}`;
+            } catch (e) {
+                console.error('Error parsing user data');
+                window.location.href = 'login.html';
+            }
+
+            // Load all data
+            loadAllData();
+        })();
+
+        // ==================== GLOBAL DATA FUNCTIONS ====================
+        function loadAllData() {
+            loadFinanceData();
+            loadChecklistData();
+            loadTadarusData();
+            loadHutangData();
+        }
+
+        // ==================== SMART FINANCE ====================
+        let expenses = [];
+        const DAILY_BUDGET = 100000; // Budget default Rp 100.000/hari
+
+        function loadFinanceData() {
+            try {
+                const saved = localStorage.getItem('puasaku_finance');
+                expenses = saved ? JSON.parse(saved) : [];
+                renderExpenses();
+                updateRemainingBudget();
+            } catch (e) {
+                console.error('Error loading finance data');
+                expenses = [];
+            }
+        }
+
+        function saveFinanceData() {
+            localStorage.setItem('puasaku_finance', JSON.stringify(expenses));
+            updateRemainingBudget();
+        }
+
+        function addExpense() {
+            const nameInput = document.getElementById('expenseName');
+            const amountInput = document.getElementById('expenseAmount');
+            
+            const name = nameInput.value.trim();
+            const amount = parseInt(amountInput.value);
+
+            if (!name || !amount || amount <= 0) {
+                alert('Isi nama dan harga dengan benar!');
+                return;
+            }
+
+            expenses.push({ name, amount, id: Date.now() });
+            saveFinanceData();
+            renderExpenses();
+
+            // Clear inputs
+            nameInput.value = '';
+            amountInput.value = '';
+        }
+
+        function deleteExpense(id) {
+            expenses = expenses.filter(e => e.id !== id);
+            saveFinanceData();
+            renderExpenses();
+        }
+
+        function renderExpenses() {
+            const list = document.getElementById('expenseList');
+            if (expenses.length === 0) {
+                list.innerHTML = '<div class="expense-item" style="justify-content: center; color: var(--text-muted);">Belum ada pengeluaran</div>';
+                return;
+            }
+
+            list.innerHTML = expenses.map(exp => `
+                <div class="expense-item">
+                    <span>${exp.name}</span>
+                    <span>
+                        Rp ${exp.amount.toLocaleString()} 
+                        <button onclick="deleteExpense(${exp.id})">✕</button>
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        function updateRemainingBudget() {
+            const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+            const remaining = DAILY_BUDGET - total;
+            document.getElementById('remainingBudget').textContent = `Rp ${Math.max(0, remaining).toLocaleString()}`;
+        }
+
+        // ==================== IBADAH CHECKLIST ====================
+        const prayers = ['Subuh', 'Dzuhur', 'Ashar', 'Maghrib', 'Isya', 'Tarawih'];
+        
+        function loadChecklistData() {
+            const today = new Date().toDateString();
+            const key = `puasaku_checklist_${today}`;
+            
+            let checklistState = {};
+            try {
+                const saved = localStorage.getItem(key);
+                checklistState = saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                console.error('Error loading checklist');
+            }
+
+            renderChecklist(checklistState);
+        }
+
+        function renderChecklist(state) {
+            const container = document.getElementById('checklistContainer');
+            container.innerHTML = prayers.map(prayer => `
+                <div class="checklist-item" onclick="toggleCheckbox('${prayer}')">
+                    <input type="checkbox" id="${prayer}" ${state[prayer] ? 'checked' : ''}>
+                    <label for="${prayer}">${prayer}</label>
+                </div>
+            `).join('');
+        }
+
+        function toggleCheckbox(prayer) {
+            const checkbox = document.getElementById(prayer);
+            checkbox.checked = !checkbox.checked;
+            
+            const today = new Date().toDateString();
+            const key = `puasaku_checklist_${today}`;
+            
+            let state = {};
+            try {
+                const saved = localStorage.getItem(key);
+                state = saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                state = {};
+            }
+            
+            state[prayer] = checkbox.checked;
+            localStorage.setItem(key, JSON.stringify(state));
+        }
+
+        // ==================== TADARUS TRACKER ====================
+        function loadTadarusData() {
+            try {
+                const data = JSON.parse(localStorage.getItem('puasaku_tadarus')) || { lastPage: 0, targetPage: 604 };
+                document.getElementById('currentPage').textContent = data.lastPage;
+                const percent = Math.min(100, Math.round((data.lastPage / data.targetPage) * 100));
+                document.getElementById('progressPercent').textContent = percent + '%';
+                document.getElementById('progressFill').style.width = percent + '%';
+                document.getElementById('pageInput').value = data.lastPage;
+            } catch (e) {
+                console.error('Error loading tadarus data');
+            }
+        }
+
+        function updateTadarus() {
+            const pageInput = document.getElementById('pageInput');
+            let page = parseInt(pageInput.value);
+            
+            if (isNaN(page) || page < 0) page = 0;
+            if (page > 604) page = 604;
+
+            const data = { lastPage: page, targetPage: 604 };
+            localStorage.setItem('puasaku_tadarus', JSON.stringify(data));
+            
+            document.getElementById('currentPage').textContent = page;
+            const percent = Math.min(100, Math.round((page / 604) * 100));
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressFill').style.width = percent + '%';
+            
+            // Animasi halus sudah di-handle oleh CSS transition
+        }
+
+        // ==================== HUTANG PUASA ====================
+        function loadHutangData() {
+            try {
+                const hutang = parseInt(localStorage.getItem('puasaku_hutang')) || 0;
+                document.getElementById('hutangValue').textContent = hutang;
+            } catch (e) {
+                document.getElementById('hutangValue').textContent = '0';
+            }
+        }
+
+        function updateHutang(delta) {
+            let hutang = parseInt(localStorage.getItem('puasaku_hutang')) || 0;
+            hutang = Math.max(0, hutang + delta);
+            localStorage.setItem('puasaku_hutang', hutang);
+            document.getElementById('hutangValue').textContent = hutang;
+        }
+
+        // ==================== MENU RANDOMIZER ====================
+        const foodIdeas = [
+            "🍛 Nasi Goreng",
+            "🥣 Bubur Ayam",
+            "🥪 Roti Bakar",
+            "🍜 Mie Goreng",
+            "🥗 Salad Buah",
+            "🍢 Sate Lilit",
+            "🍚 Nasi Uduk",
+            "🥟 Pangsit Goreng",
+            "🍲 Sop Buntut",
+            "🍌 Pisang Goreng",
+            "🥘 Opor Ayam",
+            "🍚 Ketupat",
+            "🍤 Udang Goreng",
+            "🥔 Perkedel",
+            "🍛 Kari Ayam"
+        ];
+
+        function showRandomFood() {
+            const randomIndex = Math.floor(Math.random() * foodIdeas.length);
+            document.getElementById('foodIdea').textContent = foodIdeas[randomIndex];
+            document.getElementById('foodModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('foodModal').classList.remove('active');
+        }
+
+        // ==================== BOTTOM NAVIGATION ====================
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Scroll ke section terkait (sederhana)
+                const section = this.dataset.section;
+                if (section === 'dashboard') {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else if (section === 'ibadah') {
+                    document.querySelector('.feature-card:nth-child(2)').scrollIntoView({ behavior: 'smooth' });
+                } else if (section === 'keuangan') {
+                    document.querySelector('.feature-card:first-child').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // ==================== LOGOUT ====================
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            if (confirm('Yakin ingin keluar?')) {
+                // Hanya hapus user profile, data lain tetap disimpan
+                localStorage.removeItem('puasaku_user');
+                window.location.href = 'login.html';
+            }
+        });
+
+        // ==================== CLOSE MODAL ON OUTSIDE CLICK ====================
+        document.getElementById('foodModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // ==================== AUTO REFRESH DATA (untuk checklist harian) ====================
+        // Cek pergantian hari setiap menit
+        setInterval(() => {
+            loadChecklistData();
+        }, 60000);
+    </script>
 </body>
 </html>
