@@ -1,40 +1,205 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Login - Puasaku by Nursyam</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Puasaku</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            background: linear-gradient(145deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 32px;
+            padding: 2.5rem 1.8rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--card-shadow);
+            animation: slideUpFade 0.6s ease;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .brand-header h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #2A5C4E 0%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand-header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: var(--input-bg);
+            border: 1.5px solid var(--border-color);
+            border-radius: 16px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.15);
+        }
+
+        .input-group input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, var(--accent-emerald) 0%, var(--accent-gold) 100%);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(42, 92, 78, 0.3);
+            margin-top: 1rem;
+        }
+
+        .login-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 4px 12px rgba(42, 92, 78, 0.4);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(212, 175, 55, 0.3);
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            text-align: center;
+            min-height: 1.5rem;
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
-<body class="login-page">
-    <div class="container">
+<body>
+    <div class="login-container">
         <div class="login-card">
-            <div class="logo-container">
-                <div class="crescent-moon small"></div>
+            <div class="brand-header">
                 <h1>Puasaku</h1>
-                <p class="subtitle">by Nursyam</p>
+                <p>by Nursyam • Ramadan Tracker</p>
             </div>
-            
-            <form id="loginForm" class="login-form">
-                <div class="form-group">
-                    <label for="name">Nama Panggilan</label>
-                    <input type="text" id="name" name="name" placeholder="Contoh: Ahmad" required autocomplete="off">
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <label for="nickname">Nama Panggilan</label>
+                    <input type="text" id="nickname" placeholder="Contoh: Nursyam" required autocomplete="off">
                 </div>
-                
-                <div class="form-group">
+
+                <div class="input-group">
                     <label for="target">Target Sedekah/Khatam</label>
-                    <input type="text" id="target" name="target" placeholder="Contoh: Rp 500.000 / 30 Juz" required autocomplete="off">
+                    <input type="text" id="target" placeholder="Contoh: 1 Juz/hari" required autocomplete="off">
                 </div>
-                
-                <button type="submit" class="btn-primary">Mulai Perjalanan</button>
+
+                <button type="submit" class="login-btn">Mulai Perjalanan ✨</button>
+                <div id="errorMessage" class="error-message"></div>
             </form>
-            
-            <p class="login-note">✦ Selamat Menunaikan Ibadah Puasa ✦</p>
         </div>
     </div>
 
-    <script src="js/utils.js"></script>
-    <script src="js/auth.js"></script>
+    <script>
+        // Cek apakah user sudah login
+        (function() {
+            if (localStorage.getItem('puasaku_user')) {
+                window.location.href = 'dashboard.html';
+            }
+        })();
+
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const nickname = document.getElementById('nickname').value.trim();
+            const target = document.getElementById('target').value.trim();
+            const errorEl = document.getElementById('errorMessage');
+
+            if (!nickname || !target) {
+                errorEl.textContent = 'Semua field harus diisi!';
+                return;
+            }
+
+            // Simpan data user profile dengan timestamp login
+            const userProfile = {
+                nickname: nickname,
+                target: target,
+                loginDate: new Date().toISOString(),
+                lastActive: new Date().toISOString()
+            };
+
+            try {
+                localStorage.setItem('puasaku_user', JSON.stringify(userProfile));
+                
+                // Inisialisasi data default jika belum ada
+                if (!localStorage.getItem('puasaku_finance')) {
+                    localStorage.setItem('puasaku_finance', JSON.stringify([]));
+                }
+                if (!localStorage.getItem('puasaku_tadarus')) {
+                    localStorage.setItem('puasaku_tadarus', JSON.stringify({ lastPage: 0, targetPage: 604 })); // Al-Qur'an 604 halaman
+                }
+                if (!localStorage.getItem('puasaku_hutang')) {
+                    localStorage.setItem('puasaku_hutang', JSON.stringify(0));
+                }
+
+                // Redirect ke dashboard
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                errorEl.textContent = 'Gagal menyimpan data. Coba lagi.';
+                console.error('LocalStorage Error:', error);
+            }
+        }
+    </script>
 </body>
 </html>
