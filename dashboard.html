@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Puasaku</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2E7D32">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <i class="fas fa-mosque"></i> Puasaku <span>by Nursyam</span>
+        </div>
+        <div class="navbar-user">
+            <i class="fas fa-user-circle"></i>
+            <span id="username"></span>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <div class="dashboard-grid">
+            <!-- Finance Tracker Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-wallet"></i>
+                    Finance Tracker
+                </div>
+                <div id="financeContent"></div>
+            </div>
+            
+            <!-- Ibadah Checklist Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-pray"></i>
+                    Ibadah Checklist
+                </div>
+                <div id="ibadahContent"></div>
+            </div>
+            
+            <!-- Tadarus Tracker Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-quran"></i>
+                    Tadarus Tracker
+                </div>
+                <div id="tadarusContent"></div>
+            </div>
+            
+            <!-- Hutang Puasa Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-calendar-times"></i>
+                    Hutang Puasa
+                </div>
+                <div id="hutangContent"></div>
+            </div>
+            
+            <!-- Menu Randomizer Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-utensils"></i>
+                    Menu Randomizer
+                </div>
+                <div id="menuContent"></div>
+            </div>
+            
+            <!-- Info Card -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-info-circle"></i>
+                    Info & Tips
+                </div>
+                <div style="text-align: center;">
+                    <i class="fas fa-moon" style="font-size: 2rem; color: #C5A059;"></i>
+                    <p style="margin-top: 1rem;">Selamat menjalankan ibadah puasa!</p>
+                    <p>Semoga Ramadan ini membawa berkah</p>
+                    <button class="btn btn-secondary" onclick="startTour()" style="margin-top: 1rem;">
+                        <i class="fas fa-compass"></i> Lihat Tour Lagi
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Puasaku <span>by Nursyam</span> | Ramadan Tracker</p>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem;">
+            <i class="fas fa-heart" style="color: #C5A059;"></i> 
+            Mari maksimalkan ibadah di bulan suci
+        </p>
+    </footer>
+    
+    <!-- Tour Modal -->
+    <div class="tour-modal" id="tourModal">
+        <div class="tour-content">
+            <div class="tour-step">
+                <div class="tour-icon" id="tourIcon">
+                    <i class="fas fa-mosque"></i>
+                </div>
+                <h2 class="tour-title" id="tourTitle"></h2>
+                <p class="tour-description" id="tourDescription"></p>
+                
+                <div class="tour-progress" id="tourProgress"></div>
+                
+                <div class="tour-buttons">
+                    <button class="btn btn-secondary" id="prevTourBtn" onclick="prevTourStep()">
+                        <i class="fas fa-arrow-left"></i> Sebelumnya
+                    </button>
+                    <button class="btn btn-primary" id="nextTourBtn" onclick="nextTourStep()">
+                        Lanjut <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/app.js"></script>
+</body>
+</html>
