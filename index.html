@@ -1,35 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Puasaku by Nursyam</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0B4F3C">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Loading Screen Specific */
+        .loading-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--bg-primary);
+            gap: 2rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .crescent-icon {
+            font-size: 5rem;
+            animation: pulse 1.5s ease-in-out infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+        }
+
+        .loading-text span {
+            color: var(--accent-gold);
+            font-weight: 500;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.15); opacity: 1; }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; visibility: hidden; }
+        }
+    </style>
 </head>
-<body class="transition-page">
-    <div class="container">
-        <div class="loading-content">
-            <div class="crescent-moon"></div>
-            <h2 class="loading-text">Menyiapkan Berkah Ramadan...</h2>
-            <div class="loading-progress">
-                <div class="progress-bar"></div>
-            </div>
+<body>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="crescent-icon">🌙</div>
+        <div class="loading-text">
+            Menyiapkan <span>Berkah Ramadan</span>...
         </div>
     </div>
 
-    <script src="js/utils.js"></script>
     <script>
-        // Gatekeeper logic
-        setTimeout(() => {
-            const userProfile = JSON.parse(localStorage.getItem('puasaku_user'));
-            if (userProfile && userProfile.name) {
-                window.location.href = 'dashboard.html';
-            } else {
-                window.location.href = 'login.html';
-            }
-        }, 1500);
+        (function() {
+            // Cek status login dan redirect
+            const userData = localStorage.getItem('puasaku_user');
+            
+            setTimeout(() => {
+                const loadingEl = document.getElementById('loadingScreen');
+                loadingEl.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    if (userData) {
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        window.location.href = 'login.html';
+                    }
+                }, 500); // Sinkron dengan animasi fadeOut
+            }, 1500); // Fake loading 1.5 detik
+        })();
     </script>
 </body>
 </html>
