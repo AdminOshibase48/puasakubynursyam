@@ -1,128 +1,169 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Puasaku</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Dashboard - Puasaku by Nursyam</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2E7D32">
 </head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar-brand">
-            <i class="fas fa-mosque"></i> Puasaku <span>by Nursyam</span>
-        </div>
-        <div class="navbar-user">
-            <i class="fas fa-user-circle"></i>
-            <span id="username"></span>
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
-        </div>
+<body class="dashboard-page">
+    <!-- Bottom Navigation for Mobile -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" data-section="finance">
+            <span class="nav-icon">💰</span>
+            <span class="nav-label">Finance</span>
+        </button>
+        <button class="nav-item" data-section="ibadah">
+            <span class="nav-icon">🕌</span>
+            <span class="nav-label">Ibadah</span>
+        </button>
+        <button class="nav-item" data-section="tadarus">
+            <span class="nav-icon">📖</span>
+            <span class="nav-label">Tadarus</span>
+        </button>
+        <button class="nav-item" data-section="hutang">
+            <span class="nav-icon">⏳</span>
+            <span class="nav-label">Hutang</span>
+        </button>
+        <button class="nav-item" data-section="randomizer">
+            <span class="nav-icon">🎲</span>
+            <span class="nav-label">Random</span>
+        </button>
     </nav>
-    
-    <!-- Main Container -->
-    <div class="container">
-        <div class="dashboard-grid">
-            <!-- Finance Tracker Card -->
-            <div class="card">
-                <div class="card-title">
-                    <i class="fas fa-wallet"></i>
-                    Finance Tracker
-                </div>
-                <div id="financeContent"></div>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-content">
+        <!-- Header with User Info -->
+        <header class="dashboard-header glass-effect">
+            <div class="user-greeting">
+                <h2>Selamat Berpuasa, <span id="userName">...</span>!</h2>
+                <p id="userTarget">Target: ...</p>
             </div>
-            
-            <!-- Ibadah Checklist Card -->
-            <div class="card">
-                <div class="card-title">
-                    <i class="fas fa-pray"></i>
-                    Ibadah Checklist
+            <button class="logout-btn" id="logoutBtn" title="Logout">🚪</button>
+        </header>
+
+        <!-- Finance Section -->
+        <section id="finance" class="content-section active">
+            <div class="card glass-effect">
+                <h3>Smart Finance</h3>
+                <div class="budget-info">
+                    <p>Sisa Saldo Hari Ini: <span id="remainingBudget">Rp 0</span></p>
                 </div>
-                <div id="ibadahContent"></div>
-            </div>
-            
-            <!-- Tadarus Tracker Card -->
-            <div class="card">
-                <div class="card-title">
-                    <i class="fas fa-quran"></i>
-                    Tadarus Tracker
-                </div>
-                <div id="tadarusContent"></div>
-            </div>
-            
-            <!-- Hutang Puasa Card -->
-            <div class="card">
-                <div class="card-title">
-                    <i class="fas fa-calendar-times"></i>
-                    Hutang Puasa
-                </div>
-                <div id="hutangContent"></div>
-            </div>
-            
-            <!-- Menu Randomizer Card -->
-            <div class="card">
-                <div class="card-title">
-                    <i class="fas fa-utensils"></i>
-                    Menu Randomizer
-                </div>
-                <div id="menuContent"></div>
-            </div>
-            
-            <!-- Info Card -->
-            <div class="card">
-                <div class="card-title">
-                    <i class="fas fa-info-circle"></i>
-                    Info & Tips
-                </div>
-                <div style="text-align: center;">
-                    <i class="fas fa-moon" style="font-size: 2rem; color: #C5A059;"></i>
-                    <p style="margin-top: 1rem;">Selamat menjalankan ibadah puasa!</p>
-                    <p>Semoga Ramadan ini membawa berkah</p>
-                    <button class="btn btn-secondary" onclick="startTour()" style="margin-top: 1rem;">
-                        <i class="fas fa-compass"></i> Lihat Tour Lagi
-                    </button>
+                
+                <form id="expenseForm" class="expense-form">
+                    <input type="text" id="expenseName" placeholder="Nama Pengeluaran" required>
+                    <input type="number" id="expenseAmount" placeholder="Harga (Rp)" required min="0">
+                    <button type="submit" class="btn-small">Tambah</button>
+                </form>
+
+                <div class="expense-list-container">
+                    <h4>Daftar Pengeluaran</h4>
+                    <ul id="expenseList" class="expense-list"></ul>
                 </div>
             </div>
+        </section>
+
+        <!-- Ibadah Section -->
+        <section id="ibadah" class="content-section">
+            <div class="card glass-effect">
+                <h3>Checklist Ibadah Harian</h3>
+                <p class="date-display" id="currentDate"></p>
+                
+                <div class="prayer-checklist">
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="subuh"> Shubuh
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="dzuhur"> Dzuhur
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="ashar"> Ashar
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="maghrib"> Maghrib
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="isya"> Isya
+                    </label>
+                    <label class="checkbox-item tarawih">
+                        <input type="checkbox" id="tarawih"> Tarawih
+                    </label>
+                </div>
+
+                <div class="prayer-stats">
+                    <p>Progress Ibadah: <span id="prayerProgress">0/6</span></p>
+                    <div class="progress-bar-container">
+                        <div id="prayerProgressBar" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tadarus Section -->
+        <section id="tadarus" class="content-section">
+            <div class="card glass-effect">
+                <h3>Tadarus Tracker</h3>
+                
+                <div class="tadarus-input">
+                    <label for="lastPage">Halaman Terakhir:</label>
+                    <input type="number" id="lastPage" min="1" max="604" placeholder="1-604">
+                    <button id="updatePageBtn" class="btn-small">Update</button>
+                </div>
+
+                <div class="quran-progress">
+                    <p>Progress: <span id="pageProgress">0/604</span> halaman</p>
+                    <div class="progress-bar-container">
+                        <div id="quranProgressBar" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="motivation-message" id="motivationMessage"></div>
+            </div>
+        </section>
+
+        <!-- Hutang Puasa Section -->
+        <section id="hutang" class="content-section">
+            <div class="card glass-effect">
+                <h3>Hutang Puasa</h3>
+                
+                <div class="counter-container">
+                    <button id="decrementHutang" class="counter-btn">-</button>
+                    <span id="hutangCount" class="counter-value">0</span>
+                    <button id="incrementHutang" class="counter-btn">+</button>
+                </div>
+                
+                <p class="hutang-note">Hari bolong yang perlu diganti</p>
+                
+                <button id="resetHutang" class="btn-small secondary">Reset</button>
+            </div>
+        </section>
+
+        <!-- Randomizer Section -->
+        <section id="randomizer" class="content-section">
+            <div class="card glass-effect">
+                <h3>Menu Randomizer</h3>
+                <p class="randomizer-sub">Ide Takjil & Sahur</p>
+                
+                <button id="randomizeBtn" class="btn-primary">Dapatkan Ide!</button>
+                
+                <div id="randomResult" class="random-result hidden">
+                    <p class="random-emoji">🍽️</p>
+                    <p id="randomIdea" class="random-idea"></p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Randomizer -->
+    <div id="randomModal" class="modal glass-effect">
+        <div class="modal-content slide-up">
+            <span class="close-modal">&times;</span>
+            <p id="modalIdea" class="modal-idea"></p>
         </div>
     </div>
-    
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Puasaku <span>by Nursyam</span> | Ramadan Tracker</p>
-        <p style="font-size: 0.8rem; margin-top: 0.5rem;">
-            <i class="fas fa-heart" style="color: #C5A059;"></i> 
-            Mari maksimalkan ibadah di bulan suci
-        </p>
-    </footer>
-    
-    <!-- Tour Modal -->
-    <div class="tour-modal" id="tourModal">
-        <div class="tour-content">
-            <div class="tour-step">
-                <div class="tour-icon" id="tourIcon">
-                    <i class="fas fa-mosque"></i>
-                </div>
-                <h2 class="tour-title" id="tourTitle"></h2>
-                <p class="tour-description" id="tourDescription"></p>
-                
-                <div class="tour-progress" id="tourProgress"></div>
-                
-                <div class="tour-buttons">
-                    <button class="btn btn-secondary" id="prevTourBtn" onclick="prevTourStep()">
-                        <i class="fas fa-arrow-left"></i> Sebelumnya
-                    </button>
-                    <button class="btn btn-primary" id="nextTourBtn" onclick="nextTourStep()">
-                        Lanjut <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script src="js/app.js"></script>
+
+    <script src="js/utils.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
